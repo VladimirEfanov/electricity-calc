@@ -46,6 +46,7 @@
       /* Кнопка только с иконкой корзины */
 .delete-btn {
     background: var(--error-color);
+color: white !important;
     border: none;
     padding: 8px;
     border-radius: 8px;
@@ -2312,6 +2313,7 @@ function updateHistory(type) {
         return;
     }
 
+    const isSmallScreen = window.innerWidth < 480;
     let html = '';
 
     if (type === 'two') {
@@ -2320,10 +2322,10 @@ function updateHistory(type) {
                 <thead>
                     <tr>
                         <th>Месяц</th>
-                        <th>Расход Т1</th>
-                        <th>Расход Т2</th>
-                        <th>Сумма</th>
-                        <th>Действия</th>
+                        <th>${isSmallScreen ? 'Т1' : 'Расход Т1'}</th>
+                        <th>${isSmallScreen ? 'Т2' : 'Расход Т2'}</th>
+                        <th>${isSmallScreen ? 'Сумма' : 'Сумма'}</th>
+                        <th>${isSmallScreen ? '' : 'Действия'}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -2334,11 +2336,11 @@ function updateHistory(type) {
                 <thead>
                     <tr>
                         <th>Месяц</th>
-                        <th>Расход Т1</th>
-                        <th>Расход Т2</th>
-                        <th>Расход Т3</th>
-                        <th>Сумма</th>
-                        <th>Действия</th>
+                        <th>${isSmallScreen ? 'Т1' : 'Расход Т1'}</th>
+                        <th>${isSmallScreen ? 'Т2' : 'Расход Т2'}</th>
+                        <th>${isSmallScreen ? 'Т3' : 'Расход Т3'}</th>
+                        <th>${isSmallScreen ? 'Сумма' : 'Сумма'}</th>
+                        <th>${isSmallScreen ? '' : 'Действия'}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -2357,8 +2359,8 @@ function updateHistory(type) {
                     <td>${calc.diff_t2} кВт·ч</td>
                     <td>${calc.total.toFixed(2)} руб.</td>
                     <td>
-                        <button class="delete-btn" onclick="event.stopPropagation(); deleteCalculation('two', ${calc.id})">
-                            <span class="icon-mask icon-mask-delete icon-mask-sm"></span>                            
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteCalculation('two', ${calc.id})">                    
+	              	    <span class="icon-mask icon-mask-delete icon-mask-sm"></span>
                         </button>
                     </td>
                 </tr>
@@ -3413,52 +3415,78 @@ function generateReportHTML(type, year, isFullReport = false) {
     }
     
     // ОБЩАЯ ТАБЛИЦА (одинаковая для обоих случаев)
+    // ОБЩАЯ ТАБЛИЦА с явными ширинами
+html += `
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px; page-break-inside: avoid;">
+        <colgroup>
+`;
+
+if (type === 'two') {
     html += `
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px; table-layout: fixed;">
-            <thead>
-                <tr>
-                    <th style="width: 80px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: left;">Месяц</th>
+            <col style="width: 12%;"> <!-- Месяц -->
+            <col style="width: 10%;"> <!-- Т1 Показания -->
+            <col style="width: 8%;">  <!-- Т1 Расход -->
+            <col style="width: 10%;"> <!-- Т1 Сумма -->
+            <col style="width: 10%;"> <!-- Т2 Показания -->
+            <col style="width: 8%;">  <!-- Т2 Расход -->
+            <col style="width: 10%;"> <!-- Т2 Сумма -->
+            <col style="width: 12%;"> <!-- Итого -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: left;">Месяц</th>
+                <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т1 - День (7:00-23:00)</th>
+                <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т2 - Ночь (23:00-7:00)</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Итого</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Показания</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Расход</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Показания</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Расход</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
+                <th></th>
+            </tr>
     `;
-    
-    if (type === 'two') {
-        html += `
-                    <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т1 - День (7:00-23:00)</th>
-                    <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т2 - Ночь (23:00-7:00)</th>
-                    <th style="width: 70px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Итого</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th style="width: 60px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Показания</th>
-                    <th style="width: 50px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Расход</th>
-                    <th style="width: 70px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
-                    <th style="width: 60px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Показания</th>
-                    <th style="width: 50px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Расход</th>
-                    <th style="width: 70px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
-                    <th></th>
-                </tr>
-        `;
-    } else {
-        html += `
-                    <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т1 - Пик</th>
-                    <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т2 - Полупик</th>
-                    <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т3 - Ночь</th>
-                    <th style="width: 70px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Итого</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th style="width: 60px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 700; text-align: center;">Показания</th>
-                    <th style="width: 50px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 700; text-align: center;">Расход</th>
-                    <th style="width: 70px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
-                    <th style="width: 60px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Показания</th>
-                    <th style="width: 50px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Расход</th>
-                    <th style="width: 70px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
-                    <th style="width: 60px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Показания</th>
-                    <th style="width: 50px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Расход</th>
-                    <th style="width: 70px; padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
-                    <th></th>
-                </tr>
-        `;
-    }
+} else {
+    html += `
+            <col style="width: 10%;"> <!-- Месяц -->
+            <col style="width: 8%;">  <!-- Т1 Показания -->
+            <col style="width: 6%;">  <!-- Т1 Расход -->
+            <col style="width: 8%;">  <!-- Т1 Сумма -->
+            <col style="width: 8%;">  <!-- Т2 Показания -->
+            <col style="width: 6%;">  <!-- Т2 Расход -->
+            <col style="width: 8%;">  <!-- Т2 Сумма -->
+            <col style="width: 8%;">  <!-- Т3 Показания -->
+            <col style="width: 6%;">  <!-- Т3 Расход -->
+            <col style="width: 8%;">  <!-- Т3 Сумма -->
+            <col style="width: 12%;"> <!-- Итого -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: left;">Месяц</th>
+                <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т1 - Пик</th>
+                <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т2 - Полупик</th>
+                <th colspan="3" style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Т3 - Ночь</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Итого</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 700; text-align: center;">Показания</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 700; text-align: center;">Расход</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Показания</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Расход</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Показания</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Расход</th>
+                <th style="padding: 10px 6px; background: #F3F4F6; border: 1px solid #E5E7EB; font-weight: 600; text-align: center;">Сумма</th>
+                <th></th>
+            </tr>
+    `;
+}
     
     html += `
             </thead>
@@ -3483,36 +3511,36 @@ function generateReportHTML(type, year, isFullReport = false) {
             const costT2 = calc.diff_t2 * calc.tariff_t2;
             const costT3 = (calc.diff_t3 || 0) * (calc.tariff_t3 || 0);
             
-            if (type === 'two') {
-                html += `
-                    <tr>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; font-weight: 600; background: #F8F9FA;">${monthName}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280;">${calc.t1_start || 0}→${calc.t1_end || 0}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600;">${calc.diff_t1}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600;">${costT1.toFixed(2)}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280;">${calc.t2_start || 0}→${calc.t2_end || 0}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600;">${calc.diff_t2}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600;">${costT2.toFixed(2)}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600; color: #10B981;">${calc.total.toFixed(2)}</td>
-                    </tr>
-                `;
-            } else {
-                html += `
-                    <tr>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; font-weight: 600; background: #F8F9FA;">${monthName}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280;">${calc.t1_start || 0}→${calc.t1_end || 0}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600;">${calc.diff_t1}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600;">${costT1.toFixed(2)}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280;">${calc.t2_start || 0}→${calc.t2_end || 0}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600;">${calc.diff_t2}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600;">${costT2.toFixed(2)}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280;">${calc.t3_start || 0}→${calc.t3_end || 0}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600;">${calc.diff_t3 || 0}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600;">${costT3.toFixed(2)}</td>
-                        <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600; color: #10B981;">${calc.total.toFixed(2)}</td>
-                    </tr>
-                `;
-            }
+           if (type === 'two') {
+    html += `
+        <tr>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; font-weight: 600; background: #F8F9FA; width: 12%;">${monthName}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280; width: 10%;">${calc.t1_start || 0}→${calc.t1_end || 0}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600; width: 8%;">${calc.diff_t1}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600; width: 10%;">${costT1.toFixed(2)}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280; width: 10%;">${calc.t2_start || 0}→${calc.t2_end || 0}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600; width: 8%;">${calc.diff_t2}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600; width: 10%;">${costT2.toFixed(2)}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600; color: #10B981; width: 12%;">${calc.total.toFixed(2)}</td>
+        </tr>
+    `;
+} else {
+    html += `
+        <tr>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; font-weight: 600; background: #F8F9FA; width: 10%;">${monthName}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280; width: 8%;">${calc.t1_start || 0}→${calc.t1_end || 0}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600; width: 6%;">${calc.diff_t1}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600; width: 8%;">${costT1.toFixed(2)}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280; width: 8%;">${calc.t2_start || 0}→${calc.t2_end || 0}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600; width: 6%;">${calc.diff_t2}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600; width: 8%;">${costT2.toFixed(2)}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-size: 11px; color: #6B7280; width: 8%;">${calc.t3_start || 0}→${calc.t3_end || 0}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600; width: 6%;">${calc.diff_t3 || 0}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; color: #10B981; font-weight: 600; width: 8%;">${costT3.toFixed(2)}</td>
+            <td style="padding: 8px 6px; border: 1px solid #E5E7EB; text-align: center; font-weight: 600; color: #10B981; width: 12%;">${calc.total.toFixed(2)}</td>
+        </tr>
+    `;
+}
             
             quarterCost += calc.total;
         });
@@ -3567,7 +3595,7 @@ function generateReportHTML(type, year, isFullReport = false) {
         `;
     }
     
-    html += `
+    html += `s
             </tr>
         </tbody>
     </table>
