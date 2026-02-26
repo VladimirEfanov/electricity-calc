@@ -17,7 +17,7 @@
 4. Подтвердите добавление
 
 ## 🌐 Онлайн доступ
-**Ссылка:** [https://VladimirEfanov.github.io/electricity-calculator/](https://VladimirEfanov.github.io/electricity-calc/)
+**Ссылка:** [https://VladimirEfanov.github.io/electricity-calc/](https://VladimirEfanov.github.io/electricity-calc/)
 
 ## 📋 Основные возможности
 - **2-тарифный и 3-тарифный учет**
@@ -207,4 +207,4 @@ Copyright (c) 2025 Владимир Ефанов
 **Последнее обновление**: 12.2025  
 **Автор**: Владимир Ефанов  
 **GitHub**: [https://github.com/VladimirEfanov](https://github.com/VladimirEfanov)  
-**Веб-версия**: [https://VladimirEfanov.github.io/electricity-calculator/](https://VladimirEfanov.github.io/electricity-calc/)
+**Веб-версия**: [https://VladimirEfanov.github.io/electricity-calc/](https://VladimirEfanov.github.io/electricity-calc/)
