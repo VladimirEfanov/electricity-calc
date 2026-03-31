@@ -130,8 +130,8 @@
 
 ### 📦 Веб-версия и скачивание
 - **Веб-версия:** [calc.gotweb.ru](https://calc.gotweb.ru)  
-- **Скачать для Windows (EXE):** [calc.gotweb.ru/download](https://calc.gotweb.ru/download)  
-- **Скачать ZIP-архив:** [calc.gotweb.ru/download-zip](https://calc.gotweb.ru/download-zip)
+- **Скачать для Windows (EXE):** [calc.gotweb.ru/download](https://calc.gotweb.ru/Калькулятор_электроэнергии_Setup_4.0.0)  
+- **Скачать ZIP-архив:** [calc.gotweb.ru/download-zip](https://calc.gotweb.ru/Калькулятор_электроэнергии_4.0.0)
 *Все версии приложения доступны на официальном сайте.*
 
 ## 🖨️ Печать отчетов
