@@ -1,0 +1,38 @@
+{
+  "name": "Калькулятор электроэнергии",
+  "short_name": "Энергоучёт",
+  "description": "Учёт показаний 2-х и 3-х тарифных счётчиков",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay"],
+  "background_color": "#5a67d8",
+  "theme_color": "#5a67d8",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+        {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/desktop.png",
+      "sizes": "1251x783",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/mobile1.png",
+      "sizes": "442x885",
+      "type": "image/png"
+    }
+  ]
+}
